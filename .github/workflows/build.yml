@@ -1,0 +1,54 @@
+name: Build Debian Package
+
+on: 
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Шаг 1: Проверка кода
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      # Шаг 2: Установка Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      # Шаг 3: Установка зависимостей
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # Шаг 4: Импорт переменных окружения из файла .env
+      - name: Load environment variables
+        run: |
+          if [ -f .env ]; then
+            export $(cat .env | sed 's/#.*//g' | xargs)
+          fi
+
+      # Шаг 5: Сборка deb-пакета
+      - name: Build Debian package
+        run: |
+          mkdir -p deb_build/DEBIAN
+          # Подготовьте нужные файлы и зависимости для сборки
+          # Например, добавьте информацию в deb_build/DEBIAN/control
+          echo "Package: myapp" > deb_build/DEBIAN/control
+          echo "Version: 1.0" >> deb_build/DEBIAN/control
+          echo "Section: base" >> deb_build/DEBIAN/control
+          echo "Priority: optional" >> deb_build/DEBIAN/control
+          echo "Architecture: all" >> deb_build/DEBIAN/control
+          echo "Depends: python3" >> deb_build/DEBIAN/control
+          echo "Maintainer: Your Name <youremail@example.com>" >> deb_build/DEBIAN/control
+          echo "Description: My application description" >> deb_build/DEBIAN/control
+          # Скопируйте файлы проекта в нужные папки
+          mkdir -p deb_build/usr/local/bin
+          cp -r your_project_files deb_build/usr/local/bin/
+          dpkg-deb --build deb_build myapp.deb
