@@ -43,7 +43,7 @@ class startstates(StatesGroup):
 
 @dp.message(Command("start"))
 async def cmd_start(message: types.Message,state:FSMContext):
-    await message.answer("Привет! Это бот для, в который ты сможешь присылать свои ответы.")#,reply_markup=keyboard)
+    await message.answer("Привет! Это бdот для, в который ты сможешь присылать свои ответы.")#,reply_markup=keyboard)
     result = user_id_collection.find_one({"UserId":message.from_user.id})
     if result is None:
         await state.set_state(startstates.beginstart)
