@@ -1,0 +1,13 @@
+.vscode/settings.json
+.venv/*
+.venv
+.vscode
+handlers/__pycache__
+test.py
+filters/__pycache__
+.dockerignore
+.env
+docker-compose.yml
+Dockerfile
+info.log
+
