@@ -13,7 +13,9 @@ jobs:
     steps:
       # Шаг 1: Проверка кода
       - name: Check out code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: .
 
       # Шаг 2: Установка Python
       - name: Set up Python
